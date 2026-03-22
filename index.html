@@ -971,6 +971,24 @@ function loadLogForEdit(log){
   sv('aftMemo',rv('\uc810\uc2ec\uba54\ubaa8',ref.aftM));
   sv('eveMemo',rv('\uc800\ub141\uba54\ubaa8',ref.eveM));
   sv('logMemo',rv('\uba54\ubaa8',log.memo));
+
+  // 기존 사진을 photoQueue에 'existing' 상태로 추가 (삭제 가능하게)
+  if(log.photos&&log.photos.length){
+    log.photos.forEach(function(p){
+      if(p.fileId||p.url){
+        var cached=p.fileId?getThumbCache(p.fileId):'';
+        photoQueue.push({
+          file:null,
+          localUrl:cached||'',
+          status:'existing',   // 이미 Drive에 있는 사진
+          driveUrl:p.url||'',
+          fileId:p.fileId||''
+        });
+      }
+    });
+    renderPhotoGrid();
+  }
+
   var logBtn=document.querySelector('.nb[onclick*="\'log\'"]');
   goPage('log',logBtn);window.scrollTo(0,0);
   toast((log.label||log.date)+' 기록을 불러왔어요');
@@ -1218,9 +1236,11 @@ function renderPhotoGrid(){
   if(!photoQueue.length){grid.style.display='none';grid.innerHTML='';return;}
   grid.style.display='grid';
   grid.innerHTML=photoQueue.map(function(item,i){
-    var inner='<img src="'+item.localUrl+'" />';
-    if(item.status==='pending'){
-      // 선택됨 — 아직 업로드 안 됨
+    var imgSrc=item.localUrl||'';
+    var inner=imgSrc?'<img src="'+esc(imgSrc)+'" />':'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.4rem;">&#128247;</div>';
+    if(item.status==='existing'){
+      inner+='<span class="photo-thumb-ok" style="background:var(--sky);">기존</span>';
+    }else if(item.status==='pending'){
       inner+='<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:#fff;font-size:.6rem;text-align:center;padding:2px 0;">저장 시 업로드</div>';
     }else if(item.status==='uploading'){
       inner+='<div class="photo-thumb-prog"><div class="photo-thumb-prog-bar"><div class="photo-thumb-prog-fill" style="width:60%"></div></div><div class="photo-thumb-prog-txt">업로드 중...</div></div>';
@@ -1256,8 +1276,14 @@ function getThumbCache(fileId){try{return localStorage.getItem('eden_thumb_'+fil
 function uploadPhotos(){
   var url=getUrl();if(!url)return Promise.resolve([]);
   var pending=photoQueue.filter(function(p){return p.status==='pending';});
-  if(!pending.length)return Promise.resolve(photoQueue.filter(function(p){return p.status==='ok';}).map(function(p){return p.driveUrl;}));
-  var results=[];
+  // existing 사진 URL (삭제 안 된 것만)
+  var existingUrls=photoQueue.filter(function(p){return p.status==='existing';}).map(function(p){return p.driveUrl;}).filter(Boolean);
+  if(!pending.length){
+    // 새로 올릴 사진 없음 — existing + 이미 완료된 것만 반환
+    var doneUrls=photoQueue.filter(function(p){return p.status==='ok';}).map(function(p){return p.driveUrl;});
+    return Promise.resolve(existingUrls.concat(doneUrls));
+  }
+  var results=existingUrls.slice(); // existing URL부터 시작
   function uploadNext(i){
     if(i>=pending.length)return Promise.resolve(results);
     var item=pending[i];item.status='uploading';renderPhotoGrid();
