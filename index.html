@@ -974,16 +974,33 @@ function loadLogForEdit(log){
 
   // 기존 사진을 photoQueue에 'existing' 상태로 추가 (삭제 가능하게)
   if(log.photos&&log.photos.length){
-    log.photos.forEach(function(p){
+    log.photos.forEach(function(p,idx){
       if(p.fileId||p.url){
         var cached=p.fileId?getThumbCache(p.fileId):'';
-        photoQueue.push({
+        var qItem={
           file:null,
           localUrl:cached||'',
-          status:'existing',   // 이미 Drive에 있는 사진
+          status:'existing',
           driveUrl:p.url||'',
           fileId:p.fileId||''
-        });
+        };
+        photoQueue.push(qItem);
+        // 캐시 없으면 프록시로 썸네일 불러오기
+        if(!cached&&p.fileId){
+          (function(item,fileId){
+            var scriptUrl=getUrl();
+            if(!scriptUrl)return;
+            fetch(scriptUrl+'?action=img&id='+fileId)
+              .then(function(r){return r.json();})
+              .then(function(d){
+                if(d.status==='ok'&&d.dataUrl){
+                  saveThumbCache(fileId,d.dataUrl);
+                  item.localUrl=d.dataUrl;
+                  renderPhotoGrid();
+                }
+              }).catch(function(){});
+          })(qItem,p.fileId);
+        }
       }
     });
     renderPhotoGrid();
