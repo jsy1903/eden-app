@@ -1091,15 +1091,23 @@ function makeDetailHtml(log){
   }
   var photosHtml='';
   if(log.photos&&log.photos.length){
-    var scriptUrl=getUrl();
     photosHtml='<div class="hist-photos">'+log.photos.map(function(p){
       var fileId=p.fileId||'';
       var cached=fileId?getThumbCache(fileId):'';
-      var thumb=cached||(fileId&&scriptUrl?scriptUrl+'?action=img&id='+fileId:'');
       var viewUrl=fileId?'https://drive.google.com/file/d/'+fileId+'/view':p.url;
       var dlUrl=fileId?'https://drive.google.com/uc?export=download&id='+fileId:p.url;
-      if(!thumb)thumb=viewUrl;
-      return '<div class="hist-photo" onclick="openPhotoModal(\''+esc(viewUrl)+'\',\''+esc(dlUrl)+'\',\''+esc(fileId)+'\')"><img src="'+esc(thumb)+'" loading="lazy" onerror="this.parentNode.style.fontSize=\'1.6rem\';this.parentNode.innerHTML=\'&#128247;\'" /></div>';
+      // 캐시 있으면 바로 표시, 없으면 플레이스홀더 놓고 비동기 로드
+      var imgId='ph-'+fileId.replace(/[^a-zA-Z0-9]/g,'');
+      var thumb=cached||'';
+      var imgTag=thumb
+        ?'<img src="'+esc(thumb)+'" style="width:100%;height:100%;object-fit:cover;" />'
+        :'<div id="'+imgId+'" style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.6rem;cursor:pointer;">&#128247;</div>';
+      if(!cached&&fileId){
+        setTimeout(function(id,elId,vu,du){
+          loadPhotoThumb(id,elId,vu,du);
+        }.bind(null,fileId,imgId,viewUrl,dlUrl),100);
+      }
+      return '<div class="hist-photo" onclick="openPhotoModal(\''+esc(viewUrl)+'\',\''+esc(dlUrl)+'\',\''+esc(fileId)+'\')">'+imgTag+'</div>';
     }).join('')+'</div>';
   }
   return '<div class="lc-detail">'+(rows?'<div class="dg">'+rows+'</div>':'')+((studyHtml||refHtml)?'<div class="study-detail">'+studyHtml+refHtml+'</div>':'')+(log.memo?'<div class="memo-box">'+escNl(log.memo)+'</div>':'')+'</div>'+photosHtml;
@@ -1182,9 +1190,28 @@ function submitGC(){
   }).catch(function(e){toast('등록 실패: '+(e&&e.message||'오류'));}).finally(function(){if(btn)btn.disabled=false;if(ind)ind.classList.remove('on');});
 }
 
-function onPhotoSelect(files){for(var i=0;i<files.length;i++){if(photoQueue.length>=10){toast('최대 10장까지 첨부할 수 있어요');break;}addToQueue(files[i]);}renderPhotoGrid();}
-function onPhotoDrop(e){e.preventDefault();document.getElementById('photoDrop').classList.remove('drag');var files=e.dataTransfer.files;for(var i=0;i<files.length;i++){if(photoQueue.length>=10)break;if(files[i].type.startsWith('image/'))addToQueue(files[i]);}renderPhotoGrid();}
-function addToQueue(file){photoQueue.push({file:file,localUrl:URL.createObjectURL(file),status:'pending',driveUrl:'',fileId:''});}
+function onPhotoSelect(files){
+  // 파일 선택 시 저장 버튼과 완전히 분리 — 큐에만 추가
+  for(var i=0;i<files.length;i++){
+    if(photoQueue.length>=10){toast('최대 10장까지 첨부할 수 있어요');break;}
+    addToQueue(files[i]);
+  }
+  renderPhotoGrid();
+  // 절대 saveLog 호출 안 함 — 저장 버튼 누를 때만 업로드됨
+}
+function onPhotoDrop(e){
+  e.preventDefault();
+  document.getElementById('photoDrop').classList.remove('drag');
+  var files=e.dataTransfer.files;
+  for(var i=0;i<files.length;i++){
+    if(photoQueue.length>=10)break;
+    if(files[i].type.startsWith('image/'))addToQueue(files[i]);
+  }
+  renderPhotoGrid();
+}
+function addToQueue(file){
+  photoQueue.push({file:file,localUrl:URL.createObjectURL(file),status:'pending',driveUrl:'',fileId:''});
+}
 function removePhoto(idx){photoQueue.splice(idx,1);renderPhotoGrid();}
 function renderPhotoGrid(){
   var grid=document.getElementById('photoGrid');if(!grid)return;
@@ -1192,10 +1219,19 @@ function renderPhotoGrid(){
   grid.style.display='grid';
   grid.innerHTML=photoQueue.map(function(item,i){
     var inner='<img src="'+item.localUrl+'" />';
-    if(item.status==='uploading'){inner+='<div class="photo-thumb-prog"><div class="photo-thumb-prog-bar"><div class="photo-thumb-prog-fill" style="width:60%"></div></div><div class="photo-thumb-prog-txt">업로드 중...</div></div>';}
-    else if(item.status==='ok'){inner+='<span class="photo-thumb-ok">업로드됨</span>';}
-    else if(item.status==='err'){inner+='<div class="photo-thumb-err">실패 - 다시 시도</div>';}
-    if(item.status!=='uploading'){inner+='<button class="photo-thumb-del" onclick="removePhoto('+i+')">x</button>';}
+    if(item.status==='pending'){
+      // 선택됨 — 아직 업로드 안 됨
+      inner+='<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:#fff;font-size:.6rem;text-align:center;padding:2px 0;">저장 시 업로드</div>';
+    }else if(item.status==='uploading'){
+      inner+='<div class="photo-thumb-prog"><div class="photo-thumb-prog-bar"><div class="photo-thumb-prog-fill" style="width:60%"></div></div><div class="photo-thumb-prog-txt">업로드 중...</div></div>';
+    }else if(item.status==='ok'){
+      inner+='<span class="photo-thumb-ok">완료</span>';
+    }else if(item.status==='err'){
+      inner+='<div class="photo-thumb-err">실패 - 다시 시도</div>';
+    }
+    if(item.status!=='uploading'){
+      inner+='<button class="photo-thumb-del" onclick="removePhoto('+i+')">x</button>';
+    }
     return '<div class="photo-thumb">'+inner+'</div>';
   }).join('');
 }
@@ -1243,14 +1279,49 @@ function uploadPhotos(){
   }
   return uploadNext(0);
 }
+function loadPhotoThumb(fileId, elId, viewUrl, dlUrl){
+  var url=getUrl(); if(!url||!fileId)return;
+  fetch(url+'?action=img&id='+fileId)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.status==='ok'&&d.dataUrl){
+        // 캐시 저장
+        saveThumbCache(fileId,d.dataUrl);
+        // DOM 업데이트
+        var el=document.getElementById(elId);
+        if(el){
+          el.parentNode.innerHTML='<img src="'+d.dataUrl+'" style="width:100%;height:100%;object-fit:cover;" />';
+        }
+      }
+    }).catch(function(){});
+}
+
 function openPhotoModal(viewUrl,dlUrl,fileId){
   var cached=fileId?getThumbCache(fileId):'';
-  var scriptUrl=getUrl();var proxy=fileId&&scriptUrl?scriptUrl+'?action=img&id='+fileId:'';
-  var imgSrc=cached||proxy||viewUrl;
   var m=document.createElement('div');m.className='photo-modal';m.onclick=function(e){if(e.target===m)document.body.removeChild(m);};
+  var imgHtml='<div id="modal-img-wrap" style="display:flex;align-items:center;justify-content:center;max-width:100%;max-height:82vh;">';
+  if(cached){
+    imgHtml+='<img src="'+esc(cached)+'" style="max-width:100%;max-height:82vh;border-radius:10px;box-shadow:0 4px 30px rgba(0,0,0,.5)"/>';
+  }else{
+    imgHtml+='<div style="color:#fff;font-size:1rem;">&#128247; 로딩 중...</div>';
+    // 풀사이즈 로드
+    if(fileId){
+      setTimeout(function(){
+        var url2=getUrl();if(!url2)return;
+        fetch(url2+'?action=img&id='+fileId).then(function(r){return r.json();}).then(function(d){
+          if(d.status==='ok'&&d.dataUrl){
+            saveThumbCache(fileId,d.dataUrl);
+            var wrap=document.getElementById('modal-img-wrap');
+            if(wrap)wrap.innerHTML='<img src="'+d.dataUrl+'" style="max-width:100%;max-height:82vh;border-radius:10px;box-shadow:0 4px 30px rgba(0,0,0,.5)"/>';
+          }
+        }).catch(function(){});
+      },50);
+    }
+  }
+  imgHtml+='</div>';
   var dlBtn=dlUrl?'<a href="'+esc(dlUrl)+'" target="_blank" style="position:absolute;bottom:18px;right:60px;padding:7px 14px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:.75rem;text-decoration:none;border:1px solid rgba(255,255,255,.4)">다운로드</a>':'';
   var newTab='<a href="'+esc(viewUrl)+'" target="_blank" style="position:absolute;bottom:18px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid rgba(255,255,255,.4)">&#8599;</a>';
-  m.innerHTML='<img src="'+esc(imgSrc)+'" style="max-width:100%;max-height:82vh;border-radius:10px;box-shadow:0 4px 30px rgba(0,0,0,.5)"/><button class="photo-modal-close" onclick="document.body.removeChild(this.parentNode)">&#10005;</button>'+dlBtn+newTab;
+  m.innerHTML=imgHtml+'<button class="photo-modal-close" onclick="document.body.removeChild(this.parentNode)">&#10005;</button>'+dlBtn+newTab;
   document.body.appendChild(m);
 }
 function recacheAllPhotos(){
