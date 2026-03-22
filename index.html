@@ -927,11 +927,17 @@ function deleteLog(date,label){
 function confirmDelete(date,btn){
   var url=getUrl();if(!url){toast('URL을 먼저 설정해주세요');return;}
   btn.disabled=true;btn.textContent='삭제 중...';
-  fetch(url,{method:'POST',body:JSON.stringify({type:'delete',date:date})}).then(function(r){return r.json();}).then(function(d){
-    var modal=btn.closest('.confirm-modal');if(modal)document.body.removeChild(modal);
-    if(d.status==='ok'){toast('기록이 삭제됐어요 (댓글은 유지)');hiLogs=hiLogs.filter(function(r){return String(r['\ub0a0\uc9dc']||'').slice(0,10)!==date;});renderHistory();}
-    else throw new Error(d.message||'오류');
-  }).catch(function(e){toast('삭제 실패: '+(e&&e.message||'오류'));btn.disabled=false;btn.textContent='삭제';});
+  fetch(url,{method:'POST',body:JSON.stringify({type:'delete',date:date})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var modal=btn.closest('.confirm-modal');if(modal)document.body.removeChild(modal);
+      if(d.status==='ok'){
+        toast('기록이 삭제됐어요 (댓글은 유지)');
+        // Sheets에서 최신 데이터 다시 불러오기 (캐시 필터링 대신)
+        loadHistory();
+      }else throw new Error(d.message||'오류');
+    })
+    .catch(function(e){toast('삭제 실패: '+(e&&e.message||'오류'));btn.disabled=false;btn.textContent='삭제';});
 }
 
 function loadLogForEdit(log){
@@ -1148,10 +1154,27 @@ function makeDetailHtml(log){
   return '<div class="lc-detail">'+(rows?'<div class="dg">'+rows+'</div>':'')+((studyHtml||refHtml)?'<div class="study-detail">'+studyHtml+refHtml+'</div>':'')+(log.memo?'<div class="memo-box">'+escNl(log.memo)+'</div>':'')+'</div>'+photosHtml;
 }
 function makeSnapHtml(){
-  var items=clItems.slice(0,5);
-  var html=items.map(function(it){return '<div class="snap-li"><div class="snap-dot'+(it.checked?' ck':'')+'">'+( it.checked?'&#10003;':'')+'</div><span style="flex:1;'+(it.checked?'text-decoration:line-through;color:var(--ink-light);':'')+'font-size:.75rem">'+esc(it.text)+'</span></div>';}).join('');
-  var more=clItems.length>5?'<div style="font-size:.68rem;color:var(--ink-light);margin-top:3px">+'+(clItems.length-5)+'개 더</div>':'';
-  return '<div class="snap"><div class="snap-ti">체크리스트 현재 상태</div>'+html+more+'</div>';
+  if(!clItems.length) return '';
+  var html=clItems.map(function(it,i){
+    return '<div class="snap-li">'+
+      '<div class="snap-dot'+(it.checked?' ck':'')+'" onclick="toggleCLSnap('+i+')" style="cursor:pointer;">'+
+        (it.checked?'&#10003;':'')+
+      '</div>'+
+      '<span style="flex:1;'+(it.checked?'text-decoration:line-through;color:var(--ink-light);':'')+'font-size:.75rem">'+esc(it.text)+'</span>'+
+      (it.badge?'<span style="font-size:.61rem;padding:1px 5px;border-radius:10px;background:var(--tc-pale);color:var(--tc);">'+esc(it.badge)+'</span>':'')+
+    '</div>';
+  }).join('');
+  return '<div class="snap"><div class="snap-ti">&#9989; 체크리스트 현재 상태 <span style="font-size:.63rem;font-weight:400;color:var(--ink-light)">(클릭하면 체크)</span></div>'+html+'</div>';
+}
+function toggleCLSnap(i){
+  clItems[i].checked=!clItems[i].checked;
+  saveCL();
+  // 모든 열린 카드의 snap 영역 갱신
+  document.querySelectorAll('.snap').forEach(function(el){
+    el.outerHTML=makeSnapHtml();
+  });
+  // 오늘 탭 체크리스트도 갱신
+  renderCL();
 }
 function makeEcHtml(did,date){
   var emojiBtns=EMOJIS.map(function(e){return '<button class="ebt" onclick="pickIC(\''+did+'\',\''+e+'\',this)">'+e+'</button>';}).join('');
