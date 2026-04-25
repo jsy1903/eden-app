@@ -290,42 +290,27 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
   </div>
 </header>
 <nav class="nav">
-  <button class="nb act" onclick="goPage('today',this)"><span class="ni">&#9728;&#65039;</span>오늘</button>
-  <button class="nb" onclick="goPage('progress',this)"><span class="ni">&#128202;</span>진도</button>
-  <button class="nb" onclick="goPage('log',this)"><span class="ni">&#128221;</span>기록</button>
+  <button class="nb act" onclick="goPage('log',this)"><span class="ni">&#128221;</span>기록</button>
   <button class="nb" onclick="goPage('history',this)"><span class="ni">&#128218;</span>누적</button>
   <button class="nb" onclick="goPage('comments',this)"><span class="ni">&#128172;</span>댓글</button>
   <button class="nb" onclick="goPage('strategy',this)"><span class="ni">&#128161;</span>전략</button>
   <button class="nb" onclick="goPage('settings',this)"><span class="ni">&#9881;&#65039;</span>설정</button>
 </nav>
 
-<!-- TODAY -->
-<div class="pg act" id="pg-today">
-  <div class="card">
-    <div class="p-row">
-      <div class="p-av">&#127807;</div>
-      <div class="p-info">
-        <h2>정이든 (만 6세 6개월)</h2>
-        <p>아토목세틴 ~19mg &middot; IQ 81 (언어이해 103)</p>
-        <div class="pills">
-          <span class="pill p-bl">ADHD</span>
-          <span class="pill p-or">처리속도 76</span>
-          <span class="pill p-gr">강점: 언어이해 &middot; 시각기억</span>
-        </div>
-      </div>
-    </div>
+<!-- LOG (통합: 기록+진도+체크리스트) -->
+<div class="pg act" id="pg-log">
+
+  <div id="editBanner" style="display:none;background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:10px;padding:10px 13px;margin:14px 14px 0;align-items:center;justify-content:space-between;gap:8px;">
+    <div style="font-size:.79rem;color:var(--ink);">&#9999;&#65039; <strong id="editBannerDate"></strong> 기록 수정 중</div>
+    <button onclick="cancelEdit()" style="padding:5px 11px;border-radius:20px;border:1.5px solid var(--gold);background:#fff;font-family:'Gowun Dodum',sans-serif;font-size:.72rem;color:var(--ink-mid);cursor:pointer;">X 취소</button>
   </div>
-  <div class="card">
-    <div class="ctitle">&#128138; 아토목세틴 복용 타이머</div>
-    <div class="med-row">
-      <input type="time" class="med-in" id="medIn"/>
-      <button class="med-btn" onclick="setMed()">설정</button>
-    </div>
-    <div class="study-note" id="sNote">복용 시각을 설정하면 최적 공부 시간이 표시됩니다</div>
-  </div>
+
+  <div style="padding:14px;max-width:680px;margin:0 auto;">
+
+  <!-- 체크리스트 -->
   <div class="card">
     <div class="sec-hdr">
-      <div class="ctitle" style="margin-bottom:0">&#9989; 오늘 세션 체크리스트</div>
+      <div class="ctitle" style="margin-bottom:0">&#9989; 오늘 체크리스트</div>
       <button class="edit-btn" id="clEditBtn" onclick="toggleCLEdit()">&#9999;&#65039; 편집</button>
     </div>
     <ul class="cl-list" id="clList"></ul>
@@ -335,108 +320,16 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
       <button class="add-go" onclick="addCLItem()">+ 추가</button>
     </div>
   </div>
-  <div class="card">
-    <div class="sec-hdr">
-      <div class="ctitle" style="margin-bottom:0">&#129504; OT 운영 원칙</div>
-      <button class="edit-btn" id="otEditBtn" onclick="toggleOTEdit()">&#9999;&#65039; 편집</button>
-    </div>
-    <div id="otList"></div>
-    <div class="ot-add-row" id="otAddRow" style="display:none">
-      <input class="ot-add-title" id="otAddTitle" placeholder="원칙 제목..."/>
-      <input class="ot-add-desc" id="otAddDesc" placeholder="설명 (선택)"/>
-      <button class="ot-add-go" onclick="addOTItem()">+ 추가</button>
-    </div>
-  </div>
-</div>
 
-<!-- PROGRESS -->
-<div class="pg" id="pg-progress">
+  <!-- 기록 입력 -->
   <div class="card">
-    <div class="ctitle">&#128288; 영어 파닉스 진도</div>
-    <div class="ph-stats">
-      <div class="ph-sb or"><div class="ph-sn" id="phDoneN">11</div><div class="ph-sl">완료</div></div>
-      <div class="ph-sb gd"><div class="ph-sn" id="phRevN">1</div><div class="ph-sl">재복습</div></div>
-      <div class="ph-sb gr"><div class="ph-sn" id="phPctN">42%</div><div class="ph-sl">완성률</div></div>
-    </div>
-    <div class="pb-stat" id="phBarStat"><span>a~k 완료</span><span style="color:var(--fo);font-weight:700">42%</span></div>
-    <div class="pb"><div class="pbf" id="phBar" style="width:42%"></div></div>
-    <div class="pg-grid" id="pgGrid"></div>
-    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
-    <div class="ph-legend">
-      <span class="ph-leg"><span class="ph-dot" style="background:var(--fo)"></span>완료</span>
-      <span class="ph-leg"><span class="ph-dot" style="background:var(--gold)"></span>재복습</span>
-      <span class="ph-leg"><span class="ph-dot" style="background:var(--warm);border:1px solid #ccc"></span>예정</span>
-    </div>
-  </div>
-
-  <!-- CVC 진도 -->
-  <div class="card">
-    <div class="ctitle">&#128290; CVC 단어 진도</div>
-    <div class="pb-stat" id="cvcBarStat"><span>0/9 완료</span><span style="color:var(--fo);font-weight:700">0%</span></div>
-    <div class="pb"><div class="pbf" id="cvcBar" style="width:0%"></div></div>
-    <div class="pg-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;" id="cvcGrid"></div>
-    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
-  </div>
-
-  <!-- Sight Word 진도 -->
-  <div class="card">
-    <div class="ctitle">&#128064; Sight Word 진도</div>
-    <div class="pb-stat" id="swBarStat"><span>0/7 완료</span><span style="color:var(--sky);font-weight:700">0%</span></div>
-    <div class="pb"><div class="pbf" id="swBar" style="width:0%;background:linear-gradient(90deg,var(--sky),#7ab5cc)"></div></div>
-    <div class="pg-grid" style="grid-template-columns:repeat(4,1fr);gap:6px;" id="swGrid"></div>
-    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
-  </div>
-
-  <div class="card">
-    <div class="ctitle">&#128290; 수학 진도</div>
-    <div class="math-tracker" id="mathTracker"></div>
-  </div>
-  <div class="card">
-    <div class="ctitle">&#128202; 월별 목표 vs 현재 비교</div>
-    <div style="overflow-x:auto;"><table class="cmp-table" id="cmpTable"></table></div>
-  </div>
-  <div class="card">
-    <div class="ctitle">&#128506;&#65039; 영어 월별 로드맵</div>
-    <div class="rm">
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (완료)</div><div class="rm-ti-text">파닉스 26개 완주</div><div class="rm-ls">알파벳 26개 소리 완주 &middot; OT 원칙 적용</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월 (진행 중)</div><div class="rm-ti-text">CVC 블렌딩 시작</div><div class="rm-ls">Onset-rime 입문 &middot; cat/rat/hat/bat &middot; can/run/man/sit/big</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">CVC 20개+ &middot; Sight words 입문</div><div class="rm-ls">CVC 20개 이상 &middot; Sight words: i, no, you, play 등 7개</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">CVC 완성 &middot; Sight words 확장</div><div class="rm-ls">CVC 전체 완성 &middot; Sight words 15개 &middot; IEP 점검</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7월</div><div class="rm-con"><div class="rm-mo">2026년 7월 (방학)</div><div class="rm-ti-text">읽기 유창성 + Sight words 완성</div><div class="rm-ls">CVC 문장 읽기 &middot; Sight words 25개 &middot; 간단한 책 읽기 시도</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">8월</div><div class="rm-con"><div class="rm-mo">2026년 8월 (방학)</div><div class="rm-ti-text">G1 준비 완성</div><div class="rm-ls">Sight words 30개+ &middot; 짧은 문장 읽기/쓰기 &middot; IEP 문서 완성</div></div></div>
-      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 시작</div><div class="rm-ls">파닉스 완성 &middot; CVC 읽기 &middot; Sight words 30개+ &middot; IEP 가동</div></div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ctitle">&#128290; 수학 월별 로드맵</div>
-    <div class="rm">
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (완료)</div><div class="rm-ti-text">숫자 1-30 쓰기</div><div class="rm-ls">1~30 쓰기 연습 &middot; 10개 묶음 개념</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월 (진행 중)</div><div class="rm-ti-text">숫자 1-100 완성</div><div class="rm-ls">31~100 확장 &middot; 십진법 실물 조작 강화</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">십의 자리 바꿈 &middot; +1/-1</div><div class="rm-ls">10단위 개념 &middot; +1/-1 패턴 &middot; 실물 조작 병행</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">한자리수 덧셈 기초</div><div class="rm-ls">합이 5 이하 덧셈 &middot; 손가락/블록 활용</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7월</div><div class="rm-con"><div class="rm-mo">2026년 7월 (방학)</div><div class="rm-ti-text">한자리수 덧셈 완성</div><div class="rm-ls">합이 10 이하 덧셈 완성 &middot; 암산 시작</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">8월</div><div class="rm-con"><div class="rm-mo">2026년 8월 (방학)</div><div class="rm-ti-text">한자리수 뺄셈 기초</div><div class="rm-ls">뺄셈 개념 &middot; 10 이하 뺄셈 &middot; 실물 조작</div></div></div>
-      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 목표</div><div class="rm-ls">1~100 읽기쓰기 &middot; 한자리수 덧뺄셈 &middot; +1/-1 &middot; 십의 자리 개념</div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- LOG -->
-<div class="pg" id="pg-log">
-  <div class="card">
-    <div id="editBanner" style="display:none;background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:10px;padding:10px 13px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
-      <div style="font-size:.79rem;color:var(--ink);">&#9999;&#65039; <strong id="editBannerDate"></strong> 기록 수정 중</div>
-      <button onclick="cancelEdit()" style="padding:5px 11px;border-radius:20px;border:1.5px solid var(--gold);background:#fff;font-family:'Gowun Dodum',sans-serif;font-size:.72rem;color:var(--ink-mid);cursor:pointer;">X 취소</button>
-    </div>
     <div class="ctitle" id="logFormTitle">&#128221; 오늘 기록 입력</div>
     <label class="fl">&#128197; 날짜</label>
     <input type="date" class="fi" id="logDate"/>
 
-    <!-- 약 복용 섹션 -->
     <div class="study-sec" style="border-color:var(--sky-pale);">
       <div class="study-sec-ti" style="color:var(--sky);">&#128138; 약 복용</div>
-      <div style="display:flex;gap:8px;margin-bottom:9px;align-items:center;">
-        <label class="fl" style="margin-bottom:0;white-space:nowrap;">복용 여부</label>
+      <div style="display:flex;gap:8px;margin-bottom:9px;">
         <button class="ref-btn" id="medYes" onclick="setMedTaken(true,this)" style="flex:1;">복용함</button>
         <button class="ref-btn" id="medNo" onclick="setMedTaken(false,this)" style="flex:1;">N/A (미복용)</button>
       </div>
@@ -446,10 +339,11 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
           <div><label class="fl">공부 시작</label><input type="time" class="fi" id="logStudy"/></div>
         </div>
         <label class="fl">약 이름 &amp; 용량</label>
-        <input type="text" class="fi" id="medName" placeholder="예: 아토목세틴 25mg, 콘서타 18mg"/>
+        <input type="text" class="fi" id="medName" placeholder="예: 아토목세틴 25mg"/>
       </div>
       <div id="medNaNote" style="display:none;padding:8px 10px;background:var(--warm);border-radius:8px;font-size:.75rem;color:var(--ink-light);">N/A - 오늘 복용하지 않음</div>
     </div>
+
     <label class="fl">&#8987;&#65039; 착석 유지 시간 (분)</label>
     <input type="number" class="fi" id="logSeat" placeholder="예: 30" min="0" max="120"/>
     <label class="fl">&#128522; 오늘 컨디션</label>
@@ -471,7 +365,7 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
     <div class="study-sec">
       <div class="study-sec-ti">&#128218; 오늘의 영어</div>
       <label class="fl">학습 내용</label>
-      <textarea class="fta" id="engContent" placeholder="예: 파닉스 l, m 학습 / onset-rime c-at, b-at 연습"></textarea>
+      <textarea class="fta" id="engContent" placeholder="예: 파닉스 l, m / onset-rime c-at, b-at / cat, rat 읽기"></textarea>
       <div class="rule-row"><span class="rule-lbl">규칙 이해 설명 횟수</span><input type="number" class="rule-in" id="engRule" placeholder="0" min="0" max="10"/><span class="rule-lbl2">회</span></div>
     </div>
     <div class="study-sec">
@@ -489,28 +383,16 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
     <div class="study-sec" style="border-color:var(--fo-pale);">
       <div class="study-sec-ti" style="color:var(--fo);">&#129504; 오늘의 OT</div>
       <label class="fl">OT 내용</label>
-      <textarea class="fta" id="otContent" placeholder="예: 젓가락 집기 3분 / 가위질 10회 / 미로 따라그리기"></textarea>
+      <textarea class="fta" id="otContent" placeholder="예: 젓가락 집기 3분 / 가위질 10회"></textarea>
       <label class="fl">특이 반응 / 메모</label>
-      <textarea class="fta" id="otMemo" placeholder="예: 집중력 5분 유지 / 좌우 혼동 / 강아지 언급 3회"></textarea>
+      <textarea class="fta" id="otMemo" placeholder="예: 집중력 5분 유지 / 좌우 혼동"></textarea>
       <div class="rule-row"><span class="rule-lbl">착석 유지</span><input type="number" class="rule-in" id="otSeat" placeholder="0" min="0" max="120"/><span class="rule-lbl2">분</span></div>
     </div>
     <div class="ref-section">
       <div class="ref-section-ti">&#128683; 공부 거부 여부</div>
-      <div class="ref-row">
-        <span class="ref-lbl">아침</span>
-        <div class="ref-btns"><button class="ref-btn" id="morY" onclick="setRef('morning','Y',this)">거부</button><button class="ref-btn" id="morN" onclick="setRef('morning','N',this)">정상</button></div>
-        <input class="ref-memo" id="morMemo" placeholder="메모..."/>
-      </div>
-      <div class="ref-row">
-        <span class="ref-lbl">점심</span>
-        <div class="ref-btns"><button class="ref-btn" id="aftY" onclick="setRef('afternoon','Y',this)">거부</button><button class="ref-btn" id="aftN" onclick="setRef('afternoon','N',this)">정상</button></div>
-        <input class="ref-memo" id="aftMemo" placeholder="메모..."/>
-      </div>
-      <div class="ref-row">
-        <span class="ref-lbl">저녁</span>
-        <div class="ref-btns"><button class="ref-btn" id="eveY" onclick="setRef('evening','Y',this)">거부</button><button class="ref-btn" id="eveN" onclick="setRef('evening','N',this)">정상</button></div>
-        <input class="ref-memo" id="eveMemo" placeholder="메모..."/>
-      </div>
+      <div class="ref-row"><span class="ref-lbl">아침</span><div class="ref-btns"><button class="ref-btn" id="morY" onclick="setRef('morning','Y',this)">거부</button><button class="ref-btn" id="morN" onclick="setRef('morning','N',this)">정상</button></div><input class="ref-memo" id="morMemo" placeholder="메모..."/></div>
+      <div class="ref-row"><span class="ref-lbl">점심</span><div class="ref-btns"><button class="ref-btn" id="aftY" onclick="setRef('afternoon','Y',this)">거부</button><button class="ref-btn" id="aftN" onclick="setRef('afternoon','N',this)">정상</button></div><input class="ref-memo" id="aftMemo" placeholder="메모..."/></div>
+      <div class="ref-row"><span class="ref-lbl">저녁</span><div class="ref-btns"><button class="ref-btn" id="eveY" onclick="setRef('evening','Y',this)">거부</button><button class="ref-btn" id="eveN" onclick="setRef('evening','N',this)">정상</button></div><input class="ref-memo" id="eveMemo" placeholder="메모..."/></div>
     </div>
     <label class="fl">&#128204; 특이사항 / 메모</label>
     <textarea class="fta" id="logMemo" placeholder="오늘 눈에 띈 행동, 강아지 반응, 특별한 성취 등"></textarea>
@@ -524,6 +406,45 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
     <div class="photo-preview-grid" id="photoGrid"></div>
     <button class="sv-btn" id="svBtn" onclick="saveLog()">&#9729;&#65039; Google Sheets에 저장하기</button>
     <div class="sv-ind" id="svInd">저장 중...</div>
+  </div>
+
+  <!-- 진도 (localStorage만) -->
+  <div class="card">
+    <div class="ctitle">&#128288; 파닉스 진도 <span style="font-size:.65rem;font-weight:400;color:var(--ink-light)">(기기에만 저장)</span></div>
+    <div class="ph-stats">
+      <div class="ph-sb or"><div class="ph-sn" id="phDoneN">11</div><div class="ph-sl">완료</div></div>
+      <div class="ph-sb gd"><div class="ph-sn" id="phRevN">1</div><div class="ph-sl">재복습</div></div>
+      <div class="ph-sb gr"><div class="ph-sn" id="phPctN">42%</div><div class="ph-sl">완성률</div></div>
+    </div>
+    <div class="pb-stat" id="phBarStat"><span>a~k 완료</span><span style="color:var(--fo);font-weight:700">42%</span></div>
+    <div class="pb"><div class="pbf" id="phBar" style="width:42%"></div></div>
+    <div class="pg-grid" id="pgGrid"></div>
+    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
+    <div class="ph-legend">
+      <span class="ph-leg"><span class="ph-dot" style="background:var(--fo)"></span>완료</span>
+      <span class="ph-leg"><span class="ph-dot" style="background:var(--gold)"></span>재복습</span>
+      <span class="ph-leg"><span class="ph-dot" style="background:var(--warm);border:1px solid #ccc"></span>예정</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128290; CVC 단어 <span style="font-size:.65rem;font-weight:400;color:var(--ink-light)">(기기에만 저장)</span></div>
+    <div class="pb-stat" id="cvcBarStat"><span>0/9 완료</span><span style="color:var(--fo);font-weight:700">0%</span></div>
+    <div class="pb"><div class="pbf" id="cvcBar" style="width:0%"></div></div>
+    <div class="pg-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;" id="cvcGrid"></div>
+    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128064; Sight Word <span style="font-size:.65rem;font-weight:400;color:var(--ink-light)">(기기에만 저장)</span></div>
+    <div class="pb-stat" id="swBarStat"><span>0/7 완료</span><span style="color:var(--sky);font-weight:700">0%</span></div>
+    <div class="pb"><div class="pbf" id="swBar" style="width:0%;background:linear-gradient(90deg,var(--sky),#7ab5cc)"></div></div>
+    <div class="pg-grid" style="grid-template-columns:repeat(4,1fr);gap:6px;" id="swGrid"></div>
+    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
+  </div>
+  <div class="card">
+    <div class="ctitle">&#128290; 수학 진도 <span style="font-size:.65rem;font-weight:400;color:var(--ink-light)">(기기에만 저장)</span></div>
+    <div class="math-tracker" id="mathTracker"></div>
+  </div>
+
   </div>
 </div>
 
@@ -678,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function(){
   try{loadOT();renderOT();}catch(e){}
   try{loadPhonics();renderPhonics();}catch(e){}
   try{loadCVCSW();renderCVC();renderSW();}catch(e){}
-  try{loadMath();renderMath();renderCompare();}catch(e){}
+  try{loadMath();renderMath();}catch(e){}
   try{document.getElementById('logDate').value=todayStr();}catch(e){}
   try{loadMed();}catch(e){}
   try{
@@ -702,7 +623,7 @@ function goPage(name,btn){
   if(pg)pg.classList.add('act');
   if(btn)btn.classList.add('act');
   if(name==='comments')loadAllCmts();
-  if(name==='progress'){renderPhonics();renderCVC();renderSW();renderMath();renderCompare();}
+  if(name==='log'){renderPhonics();renderCVC();renderSW();renderMath();}
 }
 
 function loadCL(){try{var s=localStorage.getItem('eden_cl');clItems=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_CL));}catch(e){clItems=JSON.parse(JSON.stringify(DEFAULT_CL));}}
