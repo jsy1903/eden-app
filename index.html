@@ -368,6 +368,25 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
       <span class="ph-leg"><span class="ph-dot" style="background:var(--warm);border:1px solid #ccc"></span>예정</span>
     </div>
   </div>
+
+  <!-- CVC 진도 -->
+  <div class="card">
+    <div class="ctitle">&#128290; CVC 단어 진도</div>
+    <div class="pb-stat" id="cvcBarStat"><span>0/9 완료</span><span style="color:var(--fo);font-weight:700">0%</span></div>
+    <div class="pb"><div class="pbf" id="cvcBar" style="width:0%"></div></div>
+    <div class="pg-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;" id="cvcGrid"></div>
+    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
+  </div>
+
+  <!-- Sight Word 진도 -->
+  <div class="card">
+    <div class="ctitle">&#128064; Sight Word 진도</div>
+    <div class="pb-stat" id="swBarStat"><span>0/7 완료</span><span style="color:var(--sky);font-weight:700">0%</span></div>
+    <div class="pb"><div class="pbf" id="swBar" style="width:0%;background:linear-gradient(90deg,var(--sky),#7ab5cc)"></div></div>
+    <div class="pg-grid" style="grid-template-columns:repeat(4,1fr);gap:6px;" id="swGrid"></div>
+    <div class="ph-hint">클릭: 예정 > 완료 > 재복습 > 예정</div>
+  </div>
+
   <div class="card">
     <div class="ctitle">&#128290; 수학 진도</div>
     <div class="math-tracker" id="mathTracker"></div>
@@ -379,24 +398,25 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
   <div class="card">
     <div class="ctitle">&#128506;&#65039; 영어 월별 로드맵</div>
     <div class="rm">
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (진행 중)</div><div class="rm-ti-text">파닉스 26개 완주</div><div class="rm-ls">알파벳 26개 소리 완주 &middot; OT 원칙 적용</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월</div><div class="rm-ti-text">블렌딩 준비</div><div class="rm-ls">헷갈리는 글자 재정비 &middot; Onset-rime 입문</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">CVC 블렌딩 본격</div><div class="rm-ls">단모음 a/i/o CVC &middot; 글자 타일 블렌딩</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">중간 점검 + IEP 준비</div><div class="rm-ls">시나리오 분기 &middot; 학교 IEP 미팅</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7-8월</div><div class="rm-con"><div class="rm-mo">2026년 7~8월 (방학)</div><div class="rm-ti-text">단모음 완성 + Sight words</div><div class="rm-ls">단모음 5개 완성 &middot; Sight words 10-15개</div></div></div>
-      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 시작</div><div class="rm-ls">알파벳 26개 + CVC + Sight words &middot; IEP 가동</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (완료)</div><div class="rm-ti-text">파닉스 26개 완주</div><div class="rm-ls">알파벳 26개 소리 완주 &middot; OT 원칙 적용</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월 (진행 중)</div><div class="rm-ti-text">CVC 블렌딩 시작</div><div class="rm-ls">Onset-rime 입문 &middot; cat/rat/hat/bat &middot; can/run/man/sit/big</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">CVC 20개+ &middot; Sight words 입문</div><div class="rm-ls">CVC 20개 이상 &middot; Sight words: i, no, you, play 등 7개</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">CVC 완성 &middot; Sight words 확장</div><div class="rm-ls">CVC 전체 완성 &middot; Sight words 15개 &middot; IEP 점검</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7월</div><div class="rm-con"><div class="rm-mo">2026년 7월 (방학)</div><div class="rm-ti-text">읽기 유창성 + Sight words 완성</div><div class="rm-ls">CVC 문장 읽기 &middot; Sight words 25개 &middot; 간단한 책 읽기 시도</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">8월</div><div class="rm-con"><div class="rm-mo">2026년 8월 (방학)</div><div class="rm-ti-text">G1 준비 완성</div><div class="rm-ls">Sight words 30개+ &middot; 짧은 문장 읽기/쓰기 &middot; IEP 문서 완성</div></div></div>
+      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 시작</div><div class="rm-ls">파닉스 완성 &middot; CVC 읽기 &middot; Sight words 30개+ &middot; IEP 가동</div></div></div>
     </div>
   </div>
   <div class="card">
     <div class="ctitle">&#128290; 수학 월별 로드맵</div>
     <div class="rm">
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (진행 중)</div><div class="rm-ti-text">숫자 1-30 쓰기</div><div class="rm-ls">1~30 쓰기 연습 &middot; 10개 묶음 개념</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월</div><div class="rm-ti-text">숫자 1-60 쓰기</div><div class="rm-ls">31~60 확장 &middot; 십진법 실물 조작</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">숫자 1-100 완성</div><div class="rm-ls">61~100 완성</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">한자리수 덧셈 기초</div><div class="rm-ls">합이 5 이하 덧셈 &middot; 실물 조작</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7월</div><div class="rm-con"><div class="rm-mo">2026년 7월</div><div class="rm-ti-text">한자리수 덧셈 완성</div><div class="rm-ls">합이 10 이하 덧셈 완성</div></div></div>
-      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">8월</div><div class="rm-con"><div class="rm-mo">2026년 8월</div><div class="rm-ti-text">한자리수 뺄셈 기초</div><div class="rm-ls">뺄셈 개념 도입 &middot; 실물 조작</div></div></div>
-      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 목표</div><div class="rm-ls">1~100 읽기쓰기 &middot; 한자리수 덧뺄셈 기본</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">3월</div><div class="rm-con"><div class="rm-mo">2026년 3월 (완료)</div><div class="rm-ti-text">숫자 1-30 쓰기</div><div class="rm-ls">1~30 쓰기 연습 &middot; 10개 묶음 개념</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot c">4월</div><div class="rm-con"><div class="rm-mo">2026년 4월 (진행 중)</div><div class="rm-ti-text">숫자 1-100 완성</div><div class="rm-ls">31~100 확장 &middot; 십진법 실물 조작 강화</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">5월</div><div class="rm-con"><div class="rm-mo">2026년 5월</div><div class="rm-ti-text">십의 자리 바꿈 &middot; +1/-1</div><div class="rm-ls">10단위 개념 &middot; +1/-1 패턴 &middot; 실물 조작 병행</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">6월</div><div class="rm-con"><div class="rm-mo">2026년 6월</div><div class="rm-ti-text">한자리수 덧셈 기초</div><div class="rm-ls">합이 5 이하 덧셈 &middot; 손가락/블록 활용</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">7월</div><div class="rm-con"><div class="rm-mo">2026년 7월 (방학)</div><div class="rm-ti-text">한자리수 덧셈 완성</div><div class="rm-ls">합이 10 이하 덧셈 완성 &middot; 암산 시작</div></div></div>
+      <div class="rm-it"><div class="rm-ln"></div><div class="rm-dot f">8월</div><div class="rm-con"><div class="rm-mo">2026년 8월 (방학)</div><div class="rm-ti-text">한자리수 뺄셈 기초</div><div class="rm-ls">뺄셈 개념 &middot; 10 이하 뺄셈 &middot; 실물 조작</div></div></div>
+      <div class="rm-it"><div class="rm-dot f">9월</div><div class="rm-con"><div class="rm-mo">2026년 9월</div><div class="rm-ti-text">G1 목표</div><div class="rm-ls">1~100 읽기쓰기 &middot; 한자리수 덧뺄셈 &middot; +1/-1 &middot; 십의 자리 개념</div></div></div>
     </div>
   </div>
 </div>
@@ -411,9 +431,24 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
     <div class="ctitle" id="logFormTitle">&#128221; 오늘 기록 입력</div>
     <label class="fl">&#128197; 날짜</label>
     <input type="date" class="fi" id="logDate"/>
-    <div class="f2">
-      <div><label class="fl">&#128138; 복용 시각</label><input type="time" class="fi" id="logMed"/></div>
-      <div><label class="fl">&#128218; 공부 시작</label><input type="time" class="fi" id="logStudy"/></div>
+
+    <!-- 약 복용 섹션 -->
+    <div class="study-sec" style="border-color:var(--sky-pale);">
+      <div class="study-sec-ti" style="color:var(--sky);">&#128138; 약 복용</div>
+      <div style="display:flex;gap:8px;margin-bottom:9px;align-items:center;">
+        <label class="fl" style="margin-bottom:0;white-space:nowrap;">복용 여부</label>
+        <button class="ref-btn" id="medYes" onclick="setMedTaken(true,this)" style="flex:1;">복용함</button>
+        <button class="ref-btn" id="medNo" onclick="setMedTaken(false,this)" style="flex:1;">N/A (미복용)</button>
+      </div>
+      <div id="medDetail">
+        <div class="f2">
+          <div><label class="fl">복용 시각</label><input type="time" class="fi" id="logMed"/></div>
+          <div><label class="fl">공부 시작</label><input type="time" class="fi" id="logStudy"/></div>
+        </div>
+        <label class="fl">약 이름 &amp; 용량</label>
+        <input type="text" class="fi" id="medName" placeholder="예: 아토목세틴 25mg, 콘서타 18mg"/>
+      </div>
+      <div id="medNaNote" style="display:none;padding:8px 10px;background:var(--warm);border-radius:8px;font-size:.75rem;color:var(--ink-light);">N/A - 오늘 복용하지 않음</div>
     </div>
     <label class="fl">&#8987;&#65039; 착석 유지 시간 (분)</label>
     <input type="number" class="fi" id="logSeat" placeholder="예: 30" min="0" max="120"/>
@@ -533,23 +568,24 @@ body{font-family:'Gowun Dodum',sans-serif;background:var(--cream);color:var(--in
 <!-- STRATEGY -->
 <div class="pg" id="pg-strategy">
   <div class="card">
-    <div class="ctitle">&#9889; 핵심 전략</div>
-    <div class="tip"><span class="tip-ic">&#127919;</span><div><strong>① 규칙 먼저 명시적으로 (가장 중요)</strong>행렬추리 3 (1백분위) - 자발적 추출 매우 취약. 파닉스와 수학에도 동일 적용.</div></div>
-    <div class="tip"><span class="tip-ic">&#9989;</span><div><strong>② 무오류 학습 4단계</strong>즉시 정답 - 1-2초 대기 - 점진 증가 - 80/20 비율</div></div>
-    <div class="tip"><span class="tip-ic">&#129513;</span><div><strong>③ Onset-rime - CVC 순서</strong>CVC = 3음소 = 순차기억 3개와 일치 - 현실적 목표</div></div>
-    <div class="tip"><span class="tip-ic">&#128290;</span><div><strong>④ 수학: 실물 조작 우선</strong>바둑알/레고 10개 묶음. 숫자표 벽에 부착.</div></div>
+    <div class="ctitle">&#9889; 핵심 전략 (현재 수준)</div>
+    <div class="tip"><span class="tip-ic">&#127919;</span><div><strong>① CVC 블렌딩 - Onset-rime 방식</strong>c-at, r-at 식으로 앞자음+모음묶음 분리. 한 번에 하나씩, 성공하면 다음 단어. 실패하면 즉시 정답 제시 후 반복.</div></div>
+    <div class="tip"><span class="tip-ic">&#9989;</span><div><strong>② 무오류 학습 원칙 유지</strong>틀리면 바로 정답 보여주기. "다시 해봐" 금지. 성공 경험 쌓기가 우선.</div></div>
+    <div class="tip"><span class="tip-ic">&#128064;</span><div><strong>③ Sight word - 통째로 암기</strong>i, no, you, play 등 자주 쓰이는 단어는 소리내지 않고 통째로 인식. 플래시카드 + 곤충 그림 조합.</div></div>
+    <div class="tip"><span class="tip-ic">&#128290;</span><div><strong>④ 수학 - 십의 자리 실물 조작 우선</strong>바둑알 10개 묶음으로 십의 자리 개념 반복. +1/-1은 숫자표 보면서 한 칸 이동으로 시각화.</div></div>
+    <div class="tip"><span class="tip-ic">&#128336;</span><div><strong>⑤ 30분 절대 원칙 유지</strong>잘 돼도 30분에서 멈추기. 끝내고 싶을 때 끝내는 경험이 다음 참여 의지를 만든다.</div></div>
   </div>
   <div class="card">
-    <div class="ctitle">&#128138; 약물 최적화</div>
-    <div class="tip"><span class="tip-ic">&#9200;&#65039;</span><div><strong>최적 공부 시간</strong>복용 후 1-3시간. 복용 11시 기준 12-14시 최적.</div></div>
-    <div class="tip"><span class="tip-ic">&#128207;</span><div><strong>현재 ~19mg / 목표 22.8mg</strong>4월 중순 평가 후 증량 논의.</div></div>
-    <div class="tip"><span class="tip-ic">&#128197;</span><div><strong>아파도 복용 유지</strong>4-6주 반응, 8-12주 최대 효과.</div></div>
+    <div class="ctitle">&#128138; 약물 현황</div>
+    <div class="tip"><span class="tip-ic">&#9200;&#65039;</span><div><strong>최적 공부 시간</strong>복용 후 1-3시간. 복용 시각 기준으로 타이머 확인.</div></div>
+    <div class="tip"><span class="tip-ic">&#128207;</span><div><strong>틱 모니터링 중</strong>고개움직임/눈깜빡임 빈도 매일 기록. 약 용량 변경 시 신경과 상담.</div></div>
+    <div class="tip"><span class="tip-ic">&#128197;</span><div><strong>아파도 복용 유지</strong>하루 빠지면 혈중 농도 떨어짐. 4-6주 안정 구간 유지 중요.</div></div>
   </div>
   <div class="card">
-    <div class="ctitle">&#128170; 활용할 강점</div>
-    <div class="tip"><span class="tip-ic">&#128172;</span><div><strong>언어이해 103</strong>구두 설명 + 시청각 동시 제공 전략 유효.</div></div>
-    <div class="tip"><span class="tip-ic">&#128064;</span><div><strong>시각 기억 5-6개</strong>카드 뒤집기, 곤충 카드 활용.</div></div>
-    <div class="tip"><span class="tip-ic">&#128027;</span><div><strong>곤충/동물 관심</strong>파닉스: ant, bug, fly / 수학: 곤충 개수 세기</div></div>
+    <div class="ctitle">&#128170; 이든이 강점 활용</div>
+    <div class="tip"><span class="tip-ic">&#128172;</span><div><strong>언어이해 103 - 구두 설명 강점</strong>먼저 말로 설명하고 쓰게 하기. "이 단어 어떻게 읽어?" 보다 "cat은 c-at이야, 따라해봐"가 효과적.</div></div>
+    <div class="tip"><span class="tip-ic">&#128027;</span><div><strong>곤충/동물 테마 지속</strong>ant=CVC 단어, bug=CVC 단어. 좋아하는 곤충 카드로 단어 연결.</div></div>
+    <div class="tip"><span class="tip-ic">&#129513;</span><div><strong>퍼즐 능력 활용</strong>단어 타일 맞추기를 퍼즐처럼. 순서 맞추기 게임 형식으로 CVC 연습.</div></div>
   </div>
 </div>
 
@@ -605,7 +641,11 @@ var DEFAULT_OT = [
   {title:'규칙은 먼저 명시적으로', desc:'스스로 발견 기다리지 말 것. 먼저 알려주고 적용하게 하기'},
   {title:'공부 먼저, 강아지/TV는 그 다음', desc:'완료 후 보상'}
 ];
-var DEFAULT_MATH = {num:{status:'prog',current:29},add:{status:'none',detail:''},sub:{status:'none',detail:''}};
+var DEFAULT_MATH = {num:{status:'prog',current:29},tens:{status:'none',detail:''},add:{status:'none',detail:''},sub:{status:'none',detail:''}};
+var CVC_WORDS = ['cat','rat','hat','bat','can','run','man','sit','big'];
+var SW_WORDS  = ['i','no','play','you','what','same','like'];
+var cvcState={}, swState={};
+var medTaken = null; // true/false/null
 var RM_DATA = [
   {month:'3월',isCur:true, eng:'파닉스 26개 완주',math:'숫자 1-30 쓰기',phGoal:26,numGoal:30},
   {month:'4월',isCur:false,eng:'Onset-rime 블렌딩',math:'숫자 1-60 쓰기',phGoal:26,numGoal:60},
@@ -637,6 +677,7 @@ document.addEventListener('DOMContentLoaded', function(){
   try{loadCL();renderCL();}catch(e){}
   try{loadOT();renderOT();}catch(e){}
   try{loadPhonics();renderPhonics();}catch(e){}
+  try{loadCVCSW();renderCVC();renderSW();}catch(e){}
   try{loadMath();renderMath();renderCompare();}catch(e){}
   try{document.getElementById('logDate').value=todayStr();}catch(e){}
   try{loadMed();}catch(e){}
@@ -661,7 +702,7 @@ function goPage(name,btn){
   if(pg)pg.classList.add('act');
   if(btn)btn.classList.add('act');
   if(name==='comments')loadAllCmts();
-  if(name==='progress'){renderPhonics();renderMath();renderCompare();}
+  if(name==='progress'){renderPhonics();renderCVC();renderSW();renderMath();renderCompare();}
 }
 
 function loadCL(){try{var s=localStorage.getItem('eden_cl');clItems=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_CL));}catch(e){clItems=JSON.parse(JSON.stringify(DEFAULT_CL));}}
@@ -791,11 +832,46 @@ function renderPhonics(){
   if(dn)dn.textContent=doneN;if(rn)rn.textContent=revN;if(pn)pn.textContent=pct+'%';
 }
 
+function loadCVCSW(){
+  try{var s=localStorage.getItem('eden_cvc');cvcState=s?JSON.parse(s):{};}catch(e){cvcState={};}
+  try{var s2=localStorage.getItem('eden_sw');swState=s2?JSON.parse(s2):{};}catch(e){swState={};}
+}
+function saveCVC(){try{localStorage.setItem('eden_cvc',JSON.stringify(cvcState));}catch(e){}}
+function saveSW(){try{localStorage.setItem('eden_sw',JSON.stringify(swState));}catch(e){}}
+
+function renderWordGrid(words,state,gridId,barId,statId,onClickFn){
+  var g=document.getElementById(gridId);if(!g)return;
+  var doneN=0;
+  g.innerHTML=words.map(function(w){
+    var st=state[w]||'todo';if(st==='done')doneN++;
+    var bg=st==='done'?'var(--fo)':st==='review'?'var(--gold)':'var(--warm)';
+    var col=st==='done'||st==='review'?'#fff':'var(--ink-light)';
+    return '<div onclick="'+onClickFn+'(\''+w+'\')" style="aspect-ratio:auto;padding:8px 4px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:'+bg+';color:'+col+';font-size:.82rem;font-weight:700;cursor:pointer;transition:transform .15s;user-select:none;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'\'">'+w+'</div>';
+  }).join('');
+  var pct=Math.round(doneN/words.length*100);
+  var bar=document.getElementById(barId);if(bar)bar.style.width=pct+'%';
+  var stat=document.getElementById(statId);if(stat)stat.innerHTML='<span>'+doneN+'/'+words.length+' 완료</span><span style="color:var(--fo);font-weight:700">'+pct+'%</span>';
+}
+function clickCVC(w){var st=cvcState[w]||'todo';cvcState[w]=st==='todo'?'done':st==='done'?'review':'todo';saveCVC();renderCVC();}
+function clickSW(w){var st=swState[w]||'todo';swState[w]=st==='todo'?'done':st==='done'?'review':'todo';saveSW();renderSW();}
+function renderCVC(){renderWordGrid(CVC_WORDS,cvcState,'cvcGrid','cvcBar','cvcBarStat','clickCVC');}
+function renderSW(){renderWordGrid(SW_WORDS,swState,'swGrid','swBar','swBarStat','clickSW');}
+
+function setMedTaken(taken,btn){
+  medTaken=taken;
+  var yb=document.getElementById('medYes'),nb=document.getElementById('medNo');
+  if(yb)yb.className='ref-btn'+(taken?' n':'');
+  if(nb)nb.className='ref-btn'+(!taken?' y':'');
+  var det=document.getElementById('medDetail'),na=document.getElementById('medNaNote');
+  if(det)det.style.display=taken?'block':'none';
+  if(na)na.style.display=taken?'none':'block';
+}
+
 function loadMath(){try{var s=localStorage.getItem('eden_math');mathData=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_MATH));}catch(e){mathData=JSON.parse(JSON.stringify(DEFAULT_MATH));}}
 function saveMath(){try{localStorage.setItem('eden_math',JSON.stringify(mathData));}catch(e){}}
 function renderMath(){
   var wrap=document.getElementById('mathTracker');if(!wrap)return;
-  var items=[{key:'num',title:'숫자 1-100 쓰기',hasNum:true},{key:'add',title:'한자리수 덧셈',hasNum:false},{key:'sub',title:'한자리수 뺄셈',hasNum:false}];
+  var items=[{key:'num',title:'숫자 1-100 쓰기',hasNum:true},{key:'tens',title:'+1 십의 자리 바꿈',hasNum:false},{key:'add',title:'한자리수 덧셈',hasNum:false},{key:'sub',title:'한자리수 뺄셈',hasNum:false}];
   wrap.innerHTML='';
   items.forEach(function(it){
     var d=mathData[it.key]||{status:'none',current:0,detail:''};
@@ -873,8 +949,9 @@ function saveLog(){
     var data={
       type:isEdit?'update':undefined,
       date:date,
-      medTime:document.getElementById('logMed').value||'',
+      medTime:medTaken===false?'N/A':(document.getElementById('logMed').value||''),
       studyTime:document.getElementById('logStudy').value||'',
+      medName:medTaken===false?'N/A':(document.getElementById('medName').value||''),
       seatMin:document.getElementById('logSeat').value||'',
       rating:selRating,tics:selTics.slice(),
       engContent:document.getElementById('engContent').value||'',
@@ -910,12 +987,16 @@ function saveLog(){
   });
 }
 function resetLog(){
-  ['logMed','logStudy','logSeat','engContent','engRule','korContent','korRule','mathContent','mathRule','otContent','otMemo','otSeat','morMemo','aftMemo','eveMemo','logMemo'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  ['logMed','logStudy','logSeat','medName','engContent','engRule','korContent','korRule','mathContent','mathRule','otContent','otMemo','otSeat','morMemo','aftMemo','eveMemo','logMemo'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
   document.getElementById('logDate').value=todayStr();
-  selRating=0;selTics=[];refSt={};
+  selRating=0;selTics=[];refSt={};medTaken=null;
   document.querySelectorAll('#ratingRow .rb').forEach(function(b){b.classList.remove('s');});
   document.querySelectorAll('.tc-ch').forEach(function(c){c.classList.remove('s');});
   ['morY','morN','aftY','aftN','eveY','eveN'].forEach(function(id){var e=document.getElementById(id);if(e)e.className='ref-btn';});
+  var yb=document.getElementById('medYes'),nb=document.getElementById('medNo');
+  if(yb)yb.className='ref-btn';if(nb)nb.className='ref-btn';
+  var det=document.getElementById('medDetail'),na=document.getElementById('medNaNote');
+  if(det)det.style.display='block';if(na)na.style.display='none';
   photoQueue=[];var pi=document.getElementById('photoInput');if(pi)pi.value='';renderPhotoGrid();
 }
 
